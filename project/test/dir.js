@@ -9,9 +9,7 @@ var main_path = "/home/pi/project_dbloader/project/py/test/"
 module.exports = {
 
 	get_files: function (path) {
-		//var path = "/home/pi/project_dbloader/project/";
 
-		//var spawn = require('child_process').spawn
 		var get_files_execute_path = main_path + "get_files.py"
 		var get_files = spawn('python', [get_files_execute_path, path])
 
@@ -20,7 +18,12 @@ module.exports = {
 		});
 	},
 	get_usb: function() {
+		var get_usb_execute_path = main_path + "get_usb.py"
+		var get_usb = spawn('python', [get_usb_execute_path])
 
+		get_usb.stdout.on('data', function(data) {
+			console.log(data.toString());
+		});
 	}
 
 }

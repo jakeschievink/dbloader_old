@@ -13,4 +13,4 @@ for line in lines:
         if os.path.islink(path):
             if os.path.realpath(path).find("/usb") > 0:
           	sys.stdout.write("/dev/%s" % deviceName)
-		sys.stdout.write("\n");
+#		sys.stdout.write("\n");
