@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import os
+import sys
+
 partitionsFile = open("/proc/partitions")
 lines = partitionsFile.readlines()[2:]#Skips the header lines
 for line in lines:
@@ -10,4 +12,5 @@ for line in lines:
         path = "/sys/class/block/" + deviceName
         if os.path.islink(path):
             if os.path.realpath(path).find("/usb") > 0:
-                print "/dev/%s" % deviceName
+          	sys.stdout.write("/dev/%s" % deviceName)
+		sys.stdout.write("\n");

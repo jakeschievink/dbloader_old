@@ -17,7 +17,6 @@ http.createServer(function(request, response) {
     		response.end();  
 
     		test_dir.get_files(path);
-
 	});       
 
 }).listen(8000);
