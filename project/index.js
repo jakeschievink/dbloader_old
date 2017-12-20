@@ -16,8 +16,9 @@ http.createServer(function(request, response) {
     		response.write(html);  
     		response.end();  
 
-//    		test_dir.get_files(path);
-		test_dir.get_usb();
+		test_dir.get_usb( function(data)  {
+			console.log(data);
+		});
 	});       
 
 }).listen(8000);
