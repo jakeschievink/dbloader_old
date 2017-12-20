@@ -3,7 +3,7 @@ import os
 import sys
 
 partitionsFile = open("/proc/partitions")
-lines = partitionsFile.readlines()[2:]#Skips the header lines
+lines = partitionsFile.readlines()[2:]					#Skips the header lines
 for line in lines:
     words = [x.strip() for x in line.split()]
     minorNumber = int(words[1])
