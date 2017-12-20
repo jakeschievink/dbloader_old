@@ -1,7 +1,8 @@
 import os
 import sys
 
-path = "/home/pi/project_dbloader/project/"
+path = sys.argv[1]
+
 file_extensions = [".js"]
 
 for root, dirs, files in os.walk(path):                                                                   #walking on video_path
