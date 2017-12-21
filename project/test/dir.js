@@ -4,6 +4,7 @@
 
 // spawn - we execute python scripts with this
 var spawn = require('child_process').spawn
+var exec  = require('child_process').exec;
 
 // the main path where these scripts are 
 // TODO move to a global database or something
@@ -35,6 +36,19 @@ module.exports = {
 		// on stdout we read the data
 		get_usb.stdout.on('data', function(data) {
 			return_data(data.toString())							// as a callback we return the value
+		});
+	},
+
+	create_mount_folder: function(return_data) {
+		exec('mkdir /mnt/usb_mount/', function(error, stdout, stderr) {
+  			if (error) {
+		  		if(error.code == 1) {
+					return_data("1");			// already excisting
+				} else {
+					return_data("e");			// other errors
+				}
+			}
+			return_data(stdout.toString())
 		});
 	}
 

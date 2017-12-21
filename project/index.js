@@ -23,7 +23,18 @@ http.createServer(function(request, response) {
 		// execute some test
 		test_dir.get_usb( function(data)  {
 			console.log(data);
+
+			test_dir.create_mount_folder(function(success) {
+				if(success.toString() == "e") {
+					console.log("Some kind of error in get_usb()");
+					// handle error
+				} else if(success.toString() == "1") {
+					console.log("Already excisting mount");
+				}
+
+				
+			});
 		});
-	});       
+	});
 
 }).listen(8000);		// on port 8000
