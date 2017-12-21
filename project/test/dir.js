@@ -45,6 +45,7 @@ module.exports = {
 		});
 	},
 
+	// create_mount_folder -> creates the mounting directory
 	create_mount_folder: function(return_data) {
 		exec('mkdir ' + mount_path, function(error, stdout, stderr) {
   			if (error) {
@@ -59,18 +60,17 @@ module.exports = {
 		});
 	},
 
+	// mount_usb -> moun the usb_path
 	mount_usb: function(usb_path, return_data) {
 		exec('mount ' + usb_path + ' ' + mount_path, function(error, stdout, stderr) {
-			
-			return_data(stdout.toString());
-			
+			return_data(stdout.toString());				// just return it
 		});
 	},
 
+	// check_mount -> checks if the folder is mounted
 	check_mount: function(usb_path, return_data) {
 		var command = "if mountpoint -q " + usb_path + "; then echo '1'; else echo '0'; fi;";
 		exec(command, function(error, stdout, stderr) {
-		//	console.log(stdout.toString());
 			if(error) {
 				return_data("e");
 			} else {
