@@ -8,7 +8,8 @@ var exec  = require('child_process').exec;
 
 // the main path where these scripts are 
 // TODO move to a global database or something
-var main_path = "/home/pi/project_dbloader/project/py/test/"
+var main_path = "/home/pi/project_dbloader/project/py/"
+var mount_path = "/mnt/usb_mount"
 
 // all the functions that can be accessed via nodejs 
 module.exports = {
@@ -33,22 +34,48 @@ module.exports = {
 		var get_usb_execute_path = main_path + "get_usb.py"					// set the file we want to execute
 		var get_usb = spawn('python', [get_usb_execute_path])					// execut the file
 
+		console.log("Getting usb");
+
 		// on stdout we read the data
 		get_usb.stdout.on('data', function(data) {
+			if(data.toString() == "0") {
+				console.log("Nothing");
+			}
 			return_data(data.toString())							// as a callback we return the value
 		});
 	},
 
 	create_mount_folder: function(return_data) {
-		exec('mkdir /mnt/usb_mount/', function(error, stdout, stderr) {
+		exec('mkdir ' + mount_path, function(error, stdout, stderr) {
   			if (error) {
 		  		if(error.code == 1) {
 					return_data("1");			// already excisting
 				} else {
 					return_data("e");			// other errors
 				}
+			} else {
+				return_data("y")
 			}
-			return_data(stdout.toString())
+		});
+	},
+
+	mount_usb: function(usb_path, return_data) {
+		exec('mount ' + usb_path + ' ' + mount_path, function(error, stdout, stderr) {
+			
+			return_data(stdout.toString());
+			
+		});
+	},
+
+	check_mount: function(usb_path, return_data) {
+		var command = "if mountpoint -q " + usb_path + "; then echo '1'; else echo '0'; fi;";
+		exec(command, function(error, stdout, stderr) {
+		//	console.log(stdout.toString());
+			if(error) {
+				return_data("e");
+			} else {
+				return_data(stdout.toString());
+			}
 		});
 	}
 

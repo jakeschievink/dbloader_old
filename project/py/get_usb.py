@@ -2,6 +2,9 @@
 import os
 import sys
 
+found = 0
+found_string = ""
+
 partitionsFile = open("/proc/partitions")
 lines = partitionsFile.readlines()[2:]					#Skips the header lines
 for line in lines:
@@ -12,5 +15,11 @@ for line in lines:
         path = "/sys/class/block/" + deviceName
         if os.path.islink(path):
             if os.path.realpath(path).find("/usb") > 0:
-          	sys.stdout.write("/dev/%s" % deviceName)
-#		sys.stdout.write("\n");
+          	found = 1
+		found_string = "/dev/%s\n" % deviceName
+		
+
+if found:
+	sys.stdout.write(found_string)
+else:
+	sys.stdout.write("0\n")

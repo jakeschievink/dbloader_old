@@ -10,4 +10,3 @@ for root, dirs, files in os.walk(path):                                         
                 if not file.startswith('.') and os.path.splitext(file)[1].lower() in file_extensions:
 			sys.stdout.write(os.path.join(root, file))
 			sys.stdout.write("\n")
-
