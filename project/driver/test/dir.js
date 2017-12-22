@@ -29,9 +29,7 @@ module.exports = {
 
 	// get_usb -> gets where the usb is
 	// it prints out the /dev/sdX
-	// returns -> 0 - nothing found
-	// 	   -> the path if found
-	get_usb: function(status) {
+	get_usb: function(return_data) {
 
 		var get_usb_execute_path = main_path + "get_usb.py"					// set the file we want to execute
 		var get_usb = spawn('python', [get_usb_execute_path])					// execut the file
@@ -42,61 +40,41 @@ module.exports = {
 		get_usb.stdout.on('data', function(data) {
 			if(data.toString() == "0") {
 				console.log("Nothing");
-				status("0");
-			} else {
-				status(data.toString())							// as a callback we return the value
 			}
+			return_data(data.toString())							// as a callback we return the value
 		});
 	},
 
 	// create_mount_folder -> creates the mounting directory
-	// returns -> 2 - already excisting 
-	//	      0 - some kind of error
-	// 	      1 - created the mount
-	create_mount_folder: function(status) {
+	create_mount_folder: function(return_data) {
 		exec('mkdir ' + mount_path, function(error, stdout, stderr) {
   			if (error) {
 		  		if(error.code == 1) {
-					console.log("Already excisting mount");
-					status("2");
+					return_data("1");			// already excisting
 				} else {
-					console.log("Some kind of error");
-					status("0");
+					return_data("e");			// other errors
 				}
 			} else {
-				console.log("Created the mount");
-				status("1");
+				return_data("y")
 			}
 		});
 	},
 
 	// mount_usb -> moun the usb_path
-	// return -> 1 - mounted
-	//        -> 0 - error
-	mount_usb: function(usb_path, status) {
+	mount_usb: function(usb_path, return_data) {
 		exec('mount ' + usb_path + ' ' + mount_path, function(error, stdout, stderr) {
-			if(stdout.toString == "32") {
-				console.log("Mounted");
-				status("1");
-			} else {
-				console.log("Error");
-				status("0");
-			}
+			return_data(stdout.toString());				// just return it
 		});
 	},
 
 	// check_mount -> checks if the folder is mounted
-	// return -> 0 - error
-	//           data - mounted
 	check_mount: function(usb_path, return_data) {
 		var command = "if mountpoint -q " + usb_path + "; then echo '1'; else echo '0'; fi;";
 		exec(command, function(error, stdout, stderr) {
 			if(error) {
-				console.log("Error in mounting");
-				status("0");
+				return_data("e");
 			} else {
-				console.log("Mounted");
-				status(stdout.toString());
+				return_data(stdout.toString());
 			}
 		});
 	}
