@@ -1,0 +1,4 @@
+https://gist.github.com/lastone9182/bb49bd728bfa5b2de0837cc7b2fa97ef
+https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_image_display/py_image_display.html
+https://www.codementor.io/codeforgeek/build-website-from-scratch-using-expressjs-and-bootstrap-du107sby7
+https://www.google.rs/search?client=ubuntu&channel=fs&q=multiple+files+in+nodejs&ie=utf-8&oe=utf-8&gws_rd=cr&dcr=0&ei=hDc6Wt62OcHa6ATD4ZjABg
