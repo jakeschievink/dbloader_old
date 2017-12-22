@@ -25,6 +25,7 @@ http.listen(8000, function(){
  	dir.setup_usb(function(status, access_path) {
 		console.log("Status: " + status);
 		console.log("Mount: " + dir_driver.mount_path)
+		dir_driver.get_files((dir_driver.mount_path).toString());
 	});
 
 });
