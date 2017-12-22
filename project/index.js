@@ -2,6 +2,9 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var dir = require(__dirname + '/js/dir.js');
+	var dir_driver = require(__dirname + '/driver/dir_driver.js')
+
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/views/index.html');
 });
@@ -17,6 +20,11 @@ io.on('connection', function(socket){
 });
 
 http.listen(8000, function(){
-  console.log('listening on *:8000');
+  	console.log('listening on *:8000');
+	
+ 	dir.setup_usb(function(status, access_path) {
+		console.log("Status: " + status);
+		console.log("Mount: " + dir_driver.mount_path)
+	});
 
 });
