@@ -2,9 +2,7 @@ var dir_driver = require('../driver/dir_driver.js');
 
 module.exports = {
 
-	setup_usb: function(status, access_path) {
-
-		var usb_path;
+	setup_usb: function(status) {
 
 		dir_driver.get_usb(function(return_data_usb) {
 			if(return_data_usb == "0") {
@@ -32,6 +30,16 @@ module.exports = {
 						});
 					}
 				});
+			}
+		});
+	},
+
+	get_usb_dev_path : function(path) {
+		dir_driver.get_usb(function(return_path) {
+			if(return_path == "0") {
+				path("Error");
+			} else {
+				path(return_path);
 			}
 		});
 	}

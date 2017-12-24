@@ -1,34 +1,90 @@
-<!DOCTYPE>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<title> Test </title>
-		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-		<meta content="utf-8" http-equiv="encoding">
+   		<meta charset="utf-8">
+    		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    		<meta name="viewport" content="width=device-width, initial-scale=1">
+    		<title>Bootstrap 101 Template</title>
+
+    		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  	</head>
+  	<body>
+		<div id="blurred_loading" style="position: fixed;z-index: 1;padding-top: 100px;left: 0; top: 0; width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(255,255,255,0.8);">
+			<img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/1f430a36197347.57135ca19bbf5.gif" style="margin-left: auto; margin-right: auto; display: block;">			
+		</div>
+  		<nav class="navbar navbar-default">
+  			<div class="container-fluid">
+    				<div class="navbar-header">
+      					<a class="navbar-brand" href="#">Dashboard</a>
+    				</div>
+    				<ul class="nav navbar-nav">
+      					<li class="active"><a href="#">Home</a></li>
+      					<li><a href="#">Page 1</a></li>
+      					<li><a href="#">Page 2</a></li>
+      					<li><a href="#">Page 3</a></li>
+    				</ul>
+				<p id="usb_path" style="margin-right: 5px" class="navbar-text navbar-right">Path</p>
+  			</div>
+		</nav>
+
+		<div class="container">
+    	
+  		</div>
 		
-    		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-	</head>
-	<body>
-		
-		<button type="button" id="test" class="btn btn-primary">Primary</button>		
-
-
+    		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 		<script>
+			
+
+			var socket;
+
   			$(function () {
-    				var socket = io();
-    		
-      				socket.emit('test', 'test');
-     
+
+				// getting the socket
+    				socket = io();
+				
+				// check the usb mount and show loading
+				check_usb_status(1);
+
       				return false;
     
   			});
-		</script>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+			/*
+ 			 * Function: check_usb_status(display)
+			 * Description: it checks the status of the usb (mounted?)
+		  	 * @param display - show the loading when checking
+			 */
+			function check_usb_status(display) {
+				if(display) {
+					console.log("Showing loading page");// loading show
+					$("#blurred_loading").show();
+				} 
+
+				socket.emit('usb', "mount");
+				socket.on('usb_mount', function(data) {
+					console.log(data.path);
+					if(data.stat == 1) {
+						if(display) {
+							console.log("Removing loading page");
+							$("#blurred_loading").hide();
+						}
+
+						console.log("Everything okay...");
+						$("#usb_path").text(data.path);
+					} else {
+						console.log("Something went wrong...");
+						alert("Something went wrong, check if USB is inserted...");
+					}
+				});
+			}
+
+		</script>  
 	</body>
 </html>
