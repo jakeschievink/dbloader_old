@@ -17,14 +17,14 @@ module.exports = {
 
 	// get_files -> gets all the files in a 'path' 
 	// it prints out the paths into a list
-	get_files: function (path) {
+	get_files: function (path, return_data) {
 
 		var get_files_execute_path = main_path + "get_files.py"					// set the file we want to execute
 		var get_files = spawn('python', [get_files_execute_path, path])				// execute it with 'path' as the argument
 
 		// on stdout we read the data
 		get_files.stdout.on('data', function(data) { 
-        		console.log(data.toString().split("\n"))					// print out the data
+        		return_data(data.toString().split("\n"))					// print out the data
 		});
 	},
 
@@ -35,7 +35,7 @@ module.exports = {
 		var get_usb_execute_path = main_path + "get_usb.py"					// set the file we want to execute
 		var get_usb_spawn = spawn('python', [get_usb_execute_path])					// execut the file
 
-		console.log("Getting usb");
+		console.log("Getting usb...");
 
 		// on stdout we read the data
 		get_usb_spawn.stdout.on('data', function(data) {

@@ -29,7 +29,9 @@
 		</nav>
 
 		<div class="container">
-    	
+    			<ul class="list-group" id="file_group">
+    				<li class="list-group-item">Example</li>
+    			</ul>
   		</div>
 		
     		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -43,7 +45,8 @@
 			
 
 			var socket;
-
+			var current_files = {};
+			var mount_path;
   			$(function () {
 
 				// getting the socket
@@ -52,6 +55,7 @@
 				// check the usb mount and show loading
 				check_usb_status(1);
 
+				get_usb_files();
       				return false;
     
   			});
@@ -84,7 +88,22 @@
 					}
 				});
 			}
-
-		</script>  
+			
+			/*
+			 *  Function: get_usb_files()
+			 *  Description: act upon the files we have on the usb
+			 */
+			function get_usb_files() {
+							
+				socket.emit('files', "get_files");
+				socket.on('files', function(data) {
+					
+					for(i=0; i < (data.array_data).length; i++) {
+						$("#file_group").append('<li class="list-group-item">' + data.array_data[i] + '<p style="float:right">Upload <input type="checkbox" id="'+ i + '"checked></p></li>');
+					}
+					
+				});
+			}
+		</script>			
 	</body>
 </html>
