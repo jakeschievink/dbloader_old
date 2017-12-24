@@ -30,7 +30,7 @@
 
 		<div class="container">
     			<ul class="list-group" id="file_group">
-    				<li class="list-group-item">Example</li>
+    				<li class="list-group-item">Filenames<p style="float:right">All upload<input id="all_upload" type="checkbox"></p></li>
     			</ul>
   		</div>
 		
@@ -45,7 +45,7 @@
 			
 
 			var socket;
-			var current_files = {};
+			var files_length = 0;
 			var mount_path;
   			$(function () {
 
@@ -56,6 +56,7 @@
 				check_usb_status(1);
 
 				get_usb_files();
+				
       				return false;
     
   			});
@@ -97,13 +98,33 @@
 							
 				socket.emit('files', "get_files");
 				socket.on('files', function(data) {
-					
-					for(i=0; i < (data.array_data).length; i++) {
-						$("#file_group").append('<li class="list-group-item">' + data.array_data[i] + '<p style="float:right">Upload <input type="checkbox" id="'+ i + '"checked></p></li>');
+					files_length = (data.array_data).length;					
+					for(i=0; i < files_length; i++) {
+						if(data.array_data[i] != "") {
+							$("#file_group").append('<li class="list-group-item">' + data.array_data[i] + '<p style="float:right">Upload <input type="checkbox" id="'+ i + '"checked></p></li>');
+						}
 					}
-					
 				});
 			}
+			
+			// as the all upload checkbox changes we change all the checkbox states
+			$("#all_upload").change(function() {
+				check_all_upload($("#all_upload").is(':checked'));
+			});
+			
+			/*
+			 * Function: check_all_upload(state)
+			 * Description: set the state of all the checkboxes
+			 * @param - state -> the state of all the checkboxes
+			 */
+			function check_all_upload(state) {
+				console.log(files_length);
+				for(i=0; i < files_length; i++) {
+					$("#" + i).prop('checked',state);
+				}
+			}
+			
+		
 		</script>			
 	</body>
 </html>
