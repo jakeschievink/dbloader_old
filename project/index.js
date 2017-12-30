@@ -50,7 +50,8 @@ http.listen(8000, function() {
 	// add function to create the process_folder if its not avaible
 
 	// after finishing certain file delete from process folder
-  	im.resize("/mnt/usb_mount/Kidolgozni/DSCN4280.JPG", [500,500], function(reply) {
+/*  	im.resize("/mnt/usb_mount/Kidolgozni/DSCN4280.JPG", [500,500], function(reply) {
   		console.log("Code: " + reply);
   	})
+*/
 });
