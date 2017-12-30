@@ -46,7 +46,11 @@ io.on('connection', function(socket){
 
 http.listen(8000, function() {
   	console.log('listening on *:8000');
-  	im.resize("/home/testing/something/fuk/test.jpg", [123,321], function(reply) {
-  		console.log(reply);
+
+	// add function to create the process_folder if its not avaible
+
+	// after finishing certain file delete from process folder
+  	im.resize("/mnt/usb_mount/Kidolgozni/DSCN4280.JPG", [500,500], function(reply) {
+  		console.log("Code: " + reply);
   	})
 });
