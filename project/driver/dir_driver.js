@@ -1,15 +1,17 @@
 /*
- *	dir.js is used for accessing the filesystem
+ *	dir_driver.js is used for accessing the filesystem
  */
 
 // spawn - we execute python scripts with this
 var spawn = require('child_process').spawn
-var exec  = require('child_process').exec;
+var exec  = require('child_process').exec
 
 // the main path where these scripts are 
 // TODO move to a global database or something
 var main_path = "/home/pi/project_db/project/py/"
 var mount_path = "/mnt/usb_mount"
+
+
 
 // all the functions that can be accessed via nodejs 
 module.exports = {

@@ -2,8 +2,12 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var secret = require(__dirname + '/doc/secret.json'); // where the appKey is ;)
+
 var dir = require(__dirname + '/js/dir.js');
 var dir_driver = require(__dirname + '/driver/dir_driver.js')
+
+var im = require(__dirname + '/driver/imgmagick_driver.js');
 
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/views/index.html');
@@ -40,8 +44,9 @@ io.on('connection', function(socket){
 
 });
 
-http.createServer(function () {
+http.listen(8000, function() {
   	console.log('listening on *:8000');
-	
-
-}).listen(8000);
+  	im.resize("/home/testing/something/fuk/test.jpg", [123,321], function(reply) {
+  		console.log(reply);
+  	})
+});
