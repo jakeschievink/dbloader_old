@@ -30,8 +30,12 @@
 
 		<div class="container">
     			<ul class="list-group" id="file_group">
-    				<li class="list-group-item">Filenames<p style="float:right">All upload<input id="all_upload" type="checkbox"></p></li>
+    				<li class="list-group-item">Filenames<p style="float:right">All upload<input id="all_upload" type="checkbox"checked></p></li>
     			</ul>
+    			
+    			<button id="upload" type="button" class="btn btn-success btn-lg">Upload!</button>
+    			<button id="setup_dropbox" type="button" class="btn btn-warning btn-lg">Setup dropbox</button>
+    			<br><br>
   		</div>
 		
     		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -41,6 +45,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+		<script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
 		<script>
 			
 
@@ -57,8 +62,6 @@
 
 				get_usb_files();
 				
-      				return false;
-    
   			});
 
 			/*
@@ -124,7 +127,7 @@
 				}
 			}
 			
-		
+			
 		</script>			
 	</body>
 </html>

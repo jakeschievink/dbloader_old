@@ -40,6 +40,8 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(8000, function(){
+http.createServer(function () {
   	console.log('listening on *:8000');
-});
+	
+
+}).listen(8000);
