@@ -3,6 +3,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var url = require('url');
+var json = require('json-update');
 
 var Dropbox = require('dropbox');
 
@@ -13,6 +14,8 @@ var dir_driver = require(__dirname + '/driver/dir_driver.js')
 
 var im = require(__dirname + '/driver/imgmagick_driver.js');
 var main_upload = require(__dirname + '/dbloader/main_upload.js');
+
+
 
 app.get('/', function(req, res){ res.sendFile(__dirname + '/views/index.html'); });
 
@@ -51,6 +54,7 @@ io.on('connection', function(socket){
 	socket.on('parse_query', function(msg) {
 		token = utils.parseQueryString(msg).access_token;
 		console.log(token);
+		json.update(__dirname + '/doc/secret.json', {token : token});
 		auth_procedure = 0;
 	});
 	
@@ -66,6 +70,14 @@ io.on('connection', function(socket){
 		console.log(url);
 		auth_procedure = 1;
 		return_url(url);
+	});
+	
+	
+	
+	
+	socket.on('upload', function(data) {
+		//console.log(data.main_upload_files);
+		main_upload.main_upload(data.main_upload_files);		
 	});
 
 });

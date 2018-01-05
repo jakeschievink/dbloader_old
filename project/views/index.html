@@ -170,14 +170,17 @@
 			
 			$("#upload").click(function() {
 			
-			
+				var upload_data = {
+					main_upload_files : []
+				};
 				
 				
 				var resize_x = $("#resize_x").val();
 				var resize_y = $("#resize_y").val();
 				
 				for(i=0; i < files_length; i++) {
-					console.log(array_data[i]);
+					
+					/* console.log(array_data[i]);
 					$("#blurred_message").text("Working on: " + array_data[i]);
 					console.log($("#all_upload" + i).is(':checked'));
 					if($("#enable_resize").is(':checked')) {
@@ -188,9 +191,15 @@
 						console.log($("#all_resize" + i).is(':checked'));
 						console.log(resize_x + "x" + resize_y);
 					}
-					console.log("\n");
+					console.log("\n"); */
+					
+					if($("#all_upload" + i).is(":checked")) {
+						upload_data.main_upload_files.push(array_data[i]);
+					}
 				}
 				
+				console.log(upload_data.main_upload_files);
+				socket.emit('upload', upload_data);				
 			});
 		
 			$("#setup_dropbox").click(function() {
