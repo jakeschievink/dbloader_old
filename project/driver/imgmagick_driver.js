@@ -20,7 +20,7 @@ module.exports = {
 		console.log("Output file: " + renamed_output_file);
 		
 		// the command
-		var resize_command = spawn('convert', [input_file, "-resize", new_size_string + "!", renamed_output_file])
+		var resize_command = spawn('convert', [input_file, "-resize", new_size_string, renamed_output_file])
 
 		// execute it and watchig the exit code
 		resize_command.on('exit', function (code) {

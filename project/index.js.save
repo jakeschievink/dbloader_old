@@ -1,8 +1,7 @@
-var utils = require(__dirname + '/js/utils.js');
+var utils = require(__dirname + 'utils.js');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var url = require('url');
 
 var Dropbox = require('dropbox');
 
@@ -12,12 +11,10 @@ var dir = require(__dirname + '/js/dir.js');
 var dir_driver = require(__dirname + '/driver/dir_driver.js')
 
 var im = require(__dirname + '/driver/imgmagick_driver.js');
-var main_upload = require(__dirname + '/dbloader/main_upload.js');
 
-app.get('/', function(req, res){ res.sendFile(__dirname + '/views/index.html'); });
-
-var auth_procedure = 0;
-var token = "";
+app.get('/', function(req, res){
+	res.sendFile(__dirname + '/views/index.html');
+});
 
 io.on('connection', function(socket){
 
@@ -47,35 +44,18 @@ io.on('connection', function(socket){
 			socket.emit('files', { mount_folder : dir_driver.mount_path});
 		}
 	});
-	
-	socket.on('parse_query', function(msg) {
-		token = utils.parseQueryString(msg).access_token;
-		console.log(token);
-		auth_procedure = 0;
-	});
-	
-	socket.on('check_token', function(msg) { if(token != "") { msg(1); } else { msg(0);} });
-	
-	socket.on('check_query', function(msg) { if(auth_procedure) { msg(1); } else { msg(0); } });
-	
-	
-	
-	socket.on('get_dropbox_auth', function(return_url) {
-		var dbx = new Dropbox({ clientId: secret.appSecret });
-		var url = dbx.getAuthenticationUrl('https://dbloader.com/dbloader_auth');
-		console.log(url);
-		auth_procedure = 1;
-		return_url(url);
-	});
 
 });
 
-http.listen(80, function() {
-  	console.log('listening on *:80');
+http.listen(8000, function() {
+  	console.log('listening on *:8000');
 
 	// add function to create the process_folder if its not avaible
-	
 
+	var dbx = new Dropbox({ clientId: 'w3nbu5vlpk26vl0' });
+	      var authUrl = dbx.getAuthenticationUrl('https://dbloader.com/dbloader_auth');
+	console.log(authUrl);
+	var dbx = new Dropbox({ accessToken: getAccessTokenFromUrl() });utils.parseQueryString(window.location.hash).access_token;
 	
 	// after finishing certain file delete from process folder
 /*  	im.resize("/mnt/usb_mount/Kidolgozni/DSCN4280.JPG", [500,500], function(reply) {

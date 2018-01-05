@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+7<html lang="en">
 	<head>
    		<meta charset="utf-8">
     		<meta http-equiv="X-UA-Compatible" content="IE=edge">
     		<meta name="viewport" content="width=device-width, initial-scale=1">
-    		<title>Bootstrap 101 Template</title>
+    		<title>Dashboard</title>
 
     		<!-- Bootstrap -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   	</head>
   	<body>
-		<div id="blurred_loading" style="position: fixed;z-index: 1;padding-top: 100px;left: 0; top: 0; width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(255,255,255,0.8);">
-			<img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/1f430a36197347.57135ca19bbf5.gif" style="margin-left: auto; margin-right: auto; display: block;">			
-		</div>
   		<nav class="navbar navbar-default">
   			<div class="container-fluid">
     				<div class="navbar-header">
@@ -73,10 +70,27 @@
 			var socket;
 			var files_length = 0;
 			var mount_path;
+			var array_data;
   			$(function () {
 
 				// getting the socket
     				socket = io();
+				
+				socket.emit('check_query', function(data) {
+					if(data) {
+						console.log("Send away the hash");
+						socket.emit('parse_query', window.location.hash);
+						socket.emit('check_token', function(data) {
+							if(data) {
+								alert("Authentication complete!");
+							} else {
+								alert("Something went wrong :( ");
+							}
+						});
+					} else {
+						console.log("No hash procedure");
+					}
+				});
 				
 				// check the usb mount and show loading
 				check_usb_status(1);
@@ -93,8 +107,9 @@
 			function check_usb_status(display) {
 				if(display) {
 					console.log("Showing loading page");// loading show
-					$("#blurred_loading").show();
-				} 
+					$("#blurred_message").text("Loading page...");
+				}
+				 
 
 				socket.emit('usb', "mount");
 				socket.on('usb_mount', function(data) {
@@ -102,7 +117,6 @@
 					if(data.stat == 1) {
 						if(display) {
 							console.log("Removing loading page");
-							$("#blurred_loading").hide();
 						}
 
 						console.log("Everything okay...");
@@ -122,6 +136,7 @@
 							
 				socket.emit('files', "get_files");
 				socket.on('files', function(data) {
+					array_data = data.array_data
 					files_length = (data.array_data).length;					
 					for(i=0; i < files_length; i++) {
 						if(data.array_data[i] != "") {
@@ -131,6 +146,7 @@
 				});
 			}
 			
+		
 			// as the all upload checkbox changes we change all the checkbox states
 			$("#all_upload").change(function() {
 				check_all("#all_upload", $("#all_upload").is(':checked'));
@@ -146,12 +162,43 @@
 			 * @param - state -> the state of all the checkboxes
 			 */
 			function check_all(begin_id, state) {
-				console.log(files_length);
+				//console.log(files_length);
 				for(i=0; i < files_length; i++) {
 					$(begin_id + i).prop('checked',state);
 				}
 			}
 			
+			$("#upload").click(function() {
+			
+			
+				
+				
+				var resize_x = $("#resize_x").val();
+				var resize_y = $("#resize_y").val();
+				
+				for(i=0; i < files_length; i++) {
+					console.log(array_data[i]);
+					$("#blurred_message").text("Working on: " + array_data[i]);
+					console.log($("#all_upload" + i).is(':checked'));
+					if($("#enable_resize").is(':checked')) {
+						if(resize_x == "" || resize_y == "") {
+							alert("Resize is empty, please give value");
+							break;
+						}
+						console.log($("#all_resize" + i).is(':checked'));
+						console.log(resize_x + "x" + resize_y);
+					}
+					console.log("\n");
+				}
+				
+			});
+		
+			$("#setup_dropbox").click(function() {
+				socket.emit('get_dropbox_auth', function(data) {
+					window.location = data;
+				});
+			
+			});			
 			
 		</script>			
 	</body>
