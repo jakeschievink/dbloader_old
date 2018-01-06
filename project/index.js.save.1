@@ -15,11 +15,12 @@ var dir_driver = require(__dirname + '/driver/dir_driver.js')
 var im = require(__dirname + '/driver/imgmagick_driver.js');
 var main_upload = require(__dirname + '/dbloader/main_upload.js');
 
+
+
 app.get('/', function(req, res){ res.sendFile(__dirname + '/views/index.html'); });
 
-
 var auth_procedure = 0;
-var token;
+var token = "";
 
 io.on('connection', function(socket){
 
@@ -71,20 +72,16 @@ io.on('connection', function(socket){
 		return_url(url);
 	});
 	
-	
-	
-	
 	socket.on('upload', function(data) {
 		//console.log(data.main_upload_files);
 		main_upload.main_upload(data.main_upload_files);		
 	});
-	
-	socket.on('status', function(data) {
-		data({main_upload : main_upload_status});
-	});
-	
+
+	function send_socket_data
 
 });
+
+
 
 http.listen(80, function() {
   	console.log('listening on *:80');
@@ -99,19 +96,3 @@ http.listen(80, function() {
   	})
 */
 });
-
-var main_upload_status;
-
-function checkups() {
-	
-	main_upload.main_upload_status( function(status) {
-		if(main_upload_status != status) {
-			main_upload_status = status;
-			console.log(main_upload_status);
-		}
-	});
-
-}
-
-setInterval(checkups, 100);
-

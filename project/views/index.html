@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-7<html lang="en">
+<html lang="en">
 	<head>
    		<meta charset="utf-8">
     		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +10,13 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   	</head>
   	<body>
+
+		<div id="loading_screen" style="position: absolute;z-index: 2;width: 100%; height: 100%; background: white; opacity: 0.7;">
+
+			<img src="http://c3stationery.com/images/ajax-loader.gif" alt="..." class="img-responsive center-block" />
+			<p align="center" id="loading_status"></p>
+		</div>
+  	
   		<nav class="navbar navbar-default">
   			<div class="container-fluid">
     				<div class="navbar-header">
@@ -71,6 +78,11 @@
 			var files_length = 0;
 			var mount_path;
 			var array_data;
+			var check_status = false;
+			
+			
+			var main_upload_status;
+			
   			$(function () {
 
 				// getting the socket
@@ -96,8 +108,26 @@
 				check_usb_status(1);
 
 				get_usb_files();
+
+				setInterval(checkups, 500);
 				
   			});
+
+			function loading(display, text) {
+				if(display) {
+					console.log("Displaying loading...");
+					$("#loading_screen").show();
+					$('body').css({'overflow':'hidden'});
+					$('html,body').scrollTop(0);
+				} else {
+					console.log("Removing loading...");
+					$("#loading_screen").hide();
+					$(document).unbind('scroll'); 
+					  $('body').css({'overflow':'visible'});
+				}
+				
+				$("#loading_status").text(text);
+			}
 
 			/*
  			 * Function: check_usb_status(display)
@@ -107,7 +137,7 @@
 			function check_usb_status(display) {
 				if(display) {
 					console.log("Showing loading page");// loading show
-					$("#blurred_message").text("Loading page...");
+					loading(1, "Loading Page...");
 				}
 				 
 
@@ -117,6 +147,7 @@
 					if(data.stat == 1) {
 						if(display) {
 							console.log("Removing loading page");
+							loading(0, "");
 						}
 
 						console.log("Everything okay...");
@@ -170,6 +201,8 @@
 			
 			$("#upload").click(function() {
 			
+				loading(1, "Starting upload...");			
+			
 				var upload_data = {
 					main_upload_files : []
 				};
@@ -198,9 +231,18 @@
 					}
 				}
 				
-				console.log(upload_data.main_upload_files);
-				socket.emit('upload', upload_data);				
-			});
+				if(upload_data.main_upload_files.length == 0) {
+					alert("No files selected!");
+					loading(0, "");
+				} else {
+				
+					console.log(upload_data.main_upload_files);
+				
+					check_status = true;
+				
+					socket.emit('upload', upload_data);				
+				}	
+			});			
 		
 			$("#setup_dropbox").click(function() {
 				socket.emit('get_dropbox_auth', function(data) {
@@ -208,6 +250,25 @@
 				});
 			
 			});			
+			
+			function checkups() {
+				//console.log("Checking...");
+				if(check_status) {
+					socket.emit('status', function(data) {
+						if(main_upload_status != data.main_upload) {
+							main_upload_status = data.main_upload;
+							loading(1, main_upload_status);
+							if(main_upload_status == "Finished") {
+								check_status = false;
+								alert("Upload finished, check your dropbox!");
+								loading(0, "");
+							}
+						}
+					});
+				}
+				
+				//console.log(main_upload_status);
+			}
 			
 		</script>			
 	</body>
