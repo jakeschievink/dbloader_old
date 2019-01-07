@@ -59,13 +59,13 @@ io.on('connection', function(socket){
 	
 	socket.on('check_token', function(msg) { if(token != "") { msg(1); } else { msg(0);} });
 	
-	socket.on('check_query', function(msg) { if(auth_procedure) { msg(1); } else { msg(0); } });
+	socket.on('check_dropbox_auth', function(msg) { if(auth_procedure) { msg(1); } else { msg(0); } });
 	
 	
 	
 	socket.on('get_dropbox_auth', function(return_url) {
 		var dbx = new Dropbox({ clientId: secret.appKey });
-		var url = dbx.getAuthenticationUrl('https://dbloader.com/dbloader_auth');
+		var url = dbx.getAuthenticationUrl();
 		console.log(url);
 		debugger;
 		auth_procedure = 1;

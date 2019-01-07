@@ -55,9 +55,12 @@
 			</ul>
     			
     			<button id="upload" type="button" class="btn btn-success btn-lg">Upload!</button>
-			<input id="authorization_key" type="input"></input>
-    			<button id="setup_dropbox" type="button" class="btn btn-warning btn-lg">Setup dropbox</button>
-    			<br><br>
+			<br>
+			<br>
+
+			<button id="get_dropbox_key" type="button" class="btn btn-warning btn-lg">Get Dropbox Key</button>
+			<input id="authorization_key" type="text" class="input" placeholder="Paste Dropbox Key"></input>
+    			<button id="setup_dropbox_with_key" type="button" class="btn btn-warning btn-lg">Setup Dropbox</button>
   		</div>
 		
     		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -85,7 +88,7 @@
 				// getting the socket
     				socket = io();
 				
-				socket.emit('check_query', function(data) {
+				socket.emit('check_dropbox_auth', function(data) {
 					if(data) {
 						console.log("Send away the hash");
 						socket.emit('parse_query', window.location.hash);
@@ -241,11 +244,22 @@
 				}	
 			});			
 		
-			$("#setup_dropbox").click(function() {
-				console.log($("#authorization_key").html);
-				socket.emit('get_dropbox_auth', function(data) {
-					window.location = data;
-				});
+			$("#get_dropbox_key").click(function() {
+				window.location = "https://www.dropbox.com/oauth2/authorize?client_id=f704ykbtx24b03p&response_type=code"
+			});
+			$("#setup_dropbox_with_key").click(function() {
+				var auth_key = $("#authorization_key").val();
+				console.log(auth_key);
+				socket.emit('parse_query', auth_key);
+						socket.emit('check_token', function(data) {
+							if(data) {
+								alert("Authentication complete!");
+							} else {
+								alert("Something went wrong :( ");
+							}
+						});
+				//socket.emit('get_dropbox_auth', function(data) {
+				//});
 			
 			});			
 			
