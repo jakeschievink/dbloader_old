@@ -55,6 +55,7 @@
 			</ul>
     			
     			<button id="upload" type="button" class="btn btn-success btn-lg">Upload!</button>
+			<input id="authorization_key" type="input"></input>
     			<button id="setup_dropbox" type="button" class="btn btn-warning btn-lg">Setup dropbox</button>
     			<br><br>
   		</div>
@@ -241,6 +242,7 @@
 			});			
 		
 			$("#setup_dropbox").click(function() {
+				console.log($("#authorization_key").html);
 				socket.emit('get_dropbox_auth', function(data) {
 					window.location = data;
 				});

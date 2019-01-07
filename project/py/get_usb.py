@@ -3,16 +3,18 @@ import os
 import psutil
 import sys
 
-found = 0
-found_string = ""
 
 partitions = psutil.disk_partitions()
 
-valid_devices = [device for device in partitions if '/mnt' in device.mountpoint]
+valid_devices = [device for device in partitions if '/dev/sd' in device.device]
 
-sys.stdout.write(valid_devices[0].mountpoint)
-
+if valid_devices[0]:
+    sys.stdout.write(valid_devices[0].device)
+else:
+    sys.stdout.write("0\n")
 #   partitionsFile = open("/proc/partitions")
+#found = 0
+#found_string = ""
 #   lines = partitionsFile.readlines()[2:]					#Skips the header lines
 #   for line in lines:
 #       words = [x.strip() for x in line.split()]

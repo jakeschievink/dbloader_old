@@ -67,6 +67,7 @@ io.on('connection', function(socket){
 		var dbx = new Dropbox({ clientId: secret.appKey });
 		var url = dbx.getAuthenticationUrl('https://dbloader.com/dbloader_auth');
 		console.log(url);
+		debugger;
 		auth_procedure = 1;
 		return_url(url);
 	});

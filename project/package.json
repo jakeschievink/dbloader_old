@@ -9,11 +9,11 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "dropbox": "^2.5.13",
-    "express": "^4.16.2",
+    "express": "^4.16.4",
     "jquery": "^3.2.1",
     "jsdom": "^11.5.1",
-    "socket.io": "^2.0.4",
-    "json-update": "^3.0.0"
+    "json-update": "^3.0.0",
+    "socket.io": "^2.2.0"
   },
   "author": "",
   "license": "ISC"
